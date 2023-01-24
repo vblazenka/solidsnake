@@ -5,15 +5,22 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
+    "test": "vitest",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
     "build": "vite build",
     "serve": "vite preview"
   },
   "license": "MIT",
   "devDependencies": {
+    "@solidjs/testing-library": "^0.6.0",
+    "@testing-library/jest-dom": "^5.16.5",
     "@vanilla-extract/vite-plugin": "^3.7.0",
+    "jsdom": "^21.1.0",
     "typescript": "^4.9.4",
     "vite": "^4.0.3",
-    "vite-plugin-solid": "^2.5.0"
+    "vite-plugin-solid": "^2.5.0",
+    "vitest": "^0.28.1"
   },
   "dependencies": {
     "@vanilla-extract/css": "^1.9.2",
