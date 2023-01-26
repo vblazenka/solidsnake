@@ -1,5 +1,5 @@
 import type { Component, JSXElement } from "solid-js";
-import { Container } from "./styles.css";
+import { Container } from "./styles.css.ts";
 
 type Props = {
   children: JSXElement;

@@ -1,8 +1,9 @@
 import { defineConfig } from "vitest/config";
 import solidPlugin from "vite-plugin-solid";
+import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 
 export default defineConfig({
-  plugins: [solidPlugin()],
+  plugins: [solidPlugin(), vanillaExtractPlugin()],
   test: {
     deps: {
       registerNodeLoader: true,
