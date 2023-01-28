@@ -6,8 +6,15 @@ export const createSnakeSegment = (
   ...snakeSegment,
 });
 
-export const createInitialSnakeSegment = (): SnakeSegment[] => [
-  createSnakeSegment({ x: 200, y: 200, dir: SnakeDirection.RIGHT }),
+export const createInitialSnakeSegment = (
+  canvasWidth: number,
+  canvasHeight: number
+): SnakeSegment[] => [
+  createSnakeSegment({
+    x: canvasWidth / 2,
+    y: canvasHeight / 2,
+    dir: SnakeDirection.RIGHT,
+  }),
 ];
 
 export const updateSnake = (snake: SnakeSegment[]): SnakeSegment[] => {

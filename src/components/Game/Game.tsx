@@ -44,8 +44,14 @@ const updateGameState = (gameState: GameState): GameState => {
 // };
 
 export const Game: Component = () => {
+  const $canvas = document.querySelector("#canvas");
   const [getGameState, setGameState] = createSignal<GameState>(
-    createInitialGameState({ snake: createInitialSnakeSegment() })
+    createInitialGameState({
+      snake: createInitialSnakeSegment(
+        $canvas?.getBoundingClientRect().width || 0,
+        $canvas?.getBoundingClientRect().height || 0
+      ),
+    })
   );
 
   useGameLoop(() => {
@@ -70,7 +76,7 @@ export const Game: Component = () => {
           <Text>PRESS SPACE TO PLAY</Text>
         </Match>
         <Match when={getGameState().state === PlayState.PLAYING}>
-          <Snake parts={getGameState().snake} />
+          <Snake segments={getGameState().snake} />
         </Match>
       </Switch>
     </Canvas>

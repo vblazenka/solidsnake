@@ -6,5 +6,9 @@ type Props = {
 };
 
 export const Canvas: Component<Props> = (props) => {
-  return <div class={Container}>{props.children}</div>;
+  return (
+    <div class={Container} id="canvas">
+      {props.children}
+    </div>
+  );
 };
