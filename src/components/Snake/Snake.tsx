@@ -1,21 +1,24 @@
-import { Component, For, JSXElement } from "solid-js";
+import { Component, createEffect, For, JSXElement, splitProps } from "solid-js";
 import { Head, Part } from "./styles.css.ts";
 import { Snake as SnakeType, SnakeSegment } from "./types";
 
-const getPosition = (part: SnakeSegment) => ({
-  transform: `translate(${part.x}px, ${part.y}px)`,
+const getPosition = (segment: SnakeSegment) => ({
+  transform: `translate(${segment.x}px, ${segment.y}px)`,
 });
 
 export const Snake: Component<SnakeType> = (props) => {
+  const [{ segments }] = splitProps(props, ["segments"]);
   return (
-    <For each={props.segments}>
-      {(segment, index) => (
+    <For each={segments}>
+      {({ x, y }, index) => (
         <div
           // TODO: you can use classList to append class conditionally
           class={`${Part} ${index() === 0 ? Head : ""}`}
-          style={getPosition(segment)}
+          style={{ transform: `translate(${x}px, ${y}px)` }}
           data-testid="snake-segment"
-        ></div>
+        >
+          {x}
+        </div>
       )}
     </For>
   );

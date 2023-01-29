@@ -5,43 +5,9 @@ import { Snake } from "../Snake";
 import { useDetectWhitelistedGameKeyEvents } from "../../hooks/useDetectWhitelistedGameKeyEvents";
 import { useGameLoop } from "../../hooks/useGameLoop";
 import { createInitialSnakeSegment, updateSnake } from "../Snake/utils";
-import { createInitialGameState } from "./utils";
+import { createInitialGameState, updateGameState } from "./utils";
 import { GameState, PlayState } from "./types";
 import { Text } from "../UI";
-
-const updateGameState = (gameState: GameState): GameState => {
-  if (gameState.state === PlayState.NO_STARTED) {
-    return gameState;
-  }
-
-  if (gameState.state === PlayState.PLAYING) {
-    return {
-      ...gameState,
-      snake: updateSnake(gameState.snake),
-    };
-  }
-
-  return gameState;
-};
-
-// const updateSnakeDirection = (gameState: GameState, key: string): GameState => {
-//   const keyToDirection = {
-//     w: SnakeDirection.UP,
-//     d: SnakeDirection.RIGHT,
-//     s: SnakeDirection.DOWN,
-//     a: SnakeDirection.LEFT,
-//   };
-
-//   // It's enough to only update head position
-//   // the rest of the body will follow
-//   const [head, ...body] = gameState.snake;
-//   head.dir = keyToDirection[key];
-
-//   return {
-//     ...gameState,
-//     snake: [head, ...body],
-//   };
-// };
 
 export const Game: Component = () => {
   const $canvas = document.querySelector("#canvas");
@@ -51,7 +17,8 @@ export const Game: Component = () => {
         $canvas?.getBoundingClientRect().width || 0,
         $canvas?.getBoundingClientRect().height || 0
       ),
-    })
+    }),
+    { equals: false }
   );
 
   useGameLoop(() => {
@@ -60,13 +27,19 @@ export const Game: Component = () => {
 
   useDetectWhitelistedGameKeyEvents((pressedKey) => {
     if (pressedKey === "Space") {
-      setGameState((state) => ({
-        ...state,
-        state: PlayState.PLAYING,
-      }));
-    }
+      setGameState((state) => {
+        state.state = PlayState.PLAYING;
 
-    // setGameState(updateSnakeDirection(getGameState(), pressedKey));
+        return state;
+      });
+    } else {
+      console.log("@should change dir");
+      // setGameState(updateSnakeDirection(getGameState(), pressedKey));
+    }
+  });
+
+  createEffect(() => {
+    console.log(getGameState().snake);
   });
 
   return (
