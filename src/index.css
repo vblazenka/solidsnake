@@ -24,3 +24,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+p {
+  margin: 0;
+}
+
+p:not(:last-of-type) {
+  margin-bottom: 8p;
+}

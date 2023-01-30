@@ -1,6 +1,14 @@
 import { JSXElement } from "solid-js";
-import { Text as StyleText } from "./styles.css";
+import { Text as StyleText, WithBlink } from "./styles.css";
 
-export const Text = ({ children }: { children: JSXElement }) => (
-  <p class={StyleText}>{children}</p>
+export const Text = ({
+  children,
+  blink,
+}: {
+  children: JSXElement;
+  blink?: boolean;
+}) => (
+  <p class={StyleText} classList={{ [WithBlink]: blink }}>
+    {children}
+  </p>
 );

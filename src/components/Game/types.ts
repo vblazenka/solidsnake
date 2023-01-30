@@ -4,6 +4,7 @@ export enum PlayState {
   NO_STARTED,
   PLAYING,
   PAUSED,
+  GAME_OVER,
 }
 
 export type GameState = {

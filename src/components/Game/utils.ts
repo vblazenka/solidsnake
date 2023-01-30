@@ -10,16 +10,29 @@ export const createInitialGameState = (state: {
   snake: state.snake,
 });
 
+export const isCollisionWithWall = ({ x, y }) => {
+  if (x > 200 || x < -200 || y > 200 || y <= -200) return true;
+
+  return false;
+};
+
 export const updateGameState = (gameState: GameState): GameState => {
   if (gameState.state === PlayState.NO_STARTED) {
     return gameState;
   }
 
   if (gameState.state === PlayState.PLAYING) {
-    return {
+    const updatedState = {
       ...gameState,
       snake: updateSnake(gameState.snake),
     };
+
+    if (isCollisionWithWall(updatedState.snake[0])) {
+      console.log("@game over@");
+      updatedState.state = PlayState.GAME_OVER;
+    }
+
+    return updatedState;
   }
 
   return gameState;

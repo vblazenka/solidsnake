@@ -4,7 +4,10 @@ import { Canvas } from "../Canvas";
 import { Snake } from "../Snake";
 import { useDetectWhitelistedGameKeyEvents } from "../../hooks/useDetectWhitelistedGameKeyEvents";
 import { useGameLoop } from "../../hooks/useGameLoop";
-import { createInitialSnakeSegment, updateSnake } from "../Snake/utils";
+import {
+  createInitialSnakeSegment,
+  updateSnakeDirection,
+} from "../Snake/utils";
 import { createInitialGameState, updateGameState } from "./utils";
 import { GameState, PlayState } from "./types";
 import { Text } from "../UI";
@@ -31,8 +34,7 @@ export const Game: Component = () => {
         state: PlayState.PLAYING,
       }));
     } else {
-      console.log("@should change dir");
-      // setGameState(updateSnakeDirection(getGameState(), pressedKey));
+      setGameState(updateSnakeDirection(pressedKey));
     }
   });
 
@@ -40,10 +42,14 @@ export const Game: Component = () => {
     <Canvas>
       <Switch>
         <Match when={getGameState().state === PlayState.NO_STARTED}>
-          <Text>PRESS SPACE TO PLAY</Text>
+          <Text blink>PRESS SPACE TO PLAY</Text>
         </Match>
         <Match when={getGameState().state === PlayState.PLAYING}>
           <Snake segments={getGameState().snake} />
+        </Match>
+        <Match when={getGameState().state === PlayState.GAME_OVER}>
+          <Text blink>GAME OVER</Text>
+          <Text>Final score: {getGameState().score}</Text>
         </Match>
       </Switch>
     </Canvas>
