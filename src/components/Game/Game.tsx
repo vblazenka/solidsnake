@@ -47,7 +47,7 @@ export const Game: Component = () => {
         </Match>
         <Match when={getGameState().state === PlayState.PLAYING}>
           <Snake segments={getGameState().snake} />
-          <Apple />
+          <Apple {...getGameState().apple} />
         </Match>
         <Match when={getGameState().state === PlayState.GAME_OVER}>
           <Text blink>GAME OVER</Text>

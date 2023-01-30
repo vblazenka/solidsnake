@@ -2,10 +2,6 @@ import { Component, createEffect, For, JSXElement, splitProps } from "solid-js";
 import { Head, Part } from "./styles.css";
 import { Snake as SnakeType, SnakeSegment } from "./types";
 
-const getPosition = (segment: SnakeSegment) => ({
-  transform: `translate(${segment.x}px, ${segment.y}px)`,
-});
-
 export const Snake: Component<SnakeType> = (props) => {
   return (
     <For each={props.segments}>

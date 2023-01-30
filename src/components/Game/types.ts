@@ -1,4 +1,5 @@
 import { SnakeSegment } from "../Snake/types";
+import { Apple } from "../Apple/types";
 
 export enum PlayState {
   NO_STARTED,
@@ -10,5 +11,6 @@ export enum PlayState {
 export type GameState = {
   score: number;
   state: PlayState;
+  apple: Apple;
   snake: SnakeSegment[];
 };
