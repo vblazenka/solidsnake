@@ -16,7 +16,10 @@ export const updateGameState = (gameState: GameState): GameState => {
   }
 
   if (gameState.state === PlayState.PLAYING) {
-    gameState.snake = updateSnake(gameState.snake);
+    return {
+      ...gameState,
+      snake: updateSnake(gameState.snake),
+    };
   }
 
   return gameState;

@@ -17,29 +17,23 @@ export const Game: Component = () => {
         $canvas?.getBoundingClientRect().width || 0,
         $canvas?.getBoundingClientRect().height || 0
       ),
-    }),
-    { equals: false }
+    })
   );
 
   useGameLoop(() => {
-    setGameState(updateGameState(getGameState()));
+    setGameState(updateGameState);
   });
 
   useDetectWhitelistedGameKeyEvents((pressedKey) => {
     if (pressedKey === "Space") {
-      setGameState((state) => {
-        state.state = PlayState.PLAYING;
-
-        return state;
-      });
+      setGameState((state) => ({
+        ...state,
+        state: PlayState.PLAYING,
+      }));
     } else {
       console.log("@should change dir");
       // setGameState(updateSnakeDirection(getGameState(), pressedKey));
     }
-  });
-
-  createEffect(() => {
-    console.log(getGameState().snake);
   });
 
   return (

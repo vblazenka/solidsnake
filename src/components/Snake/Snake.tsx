@@ -7,18 +7,15 @@ const getPosition = (segment: SnakeSegment) => ({
 });
 
 export const Snake: Component<SnakeType> = (props) => {
-  const [{ segments }] = splitProps(props, ["segments"]);
   return (
-    <For each={segments}>
-      {({ x, y }, index) => (
+    <For each={props.segments}>
+      {(segment, index) => (
         <div
           // TODO: you can use classList to append class conditionally
           class={`${Part} ${index() === 0 ? Head : ""}`}
-          style={{ transform: `translate(${x}px, ${y}px)` }}
+          style={{ transform: `translate(${segment.x}px, ${segment.y}px)` }}
           data-testid="snake-segment"
-        >
-          {x}
-        </div>
+        ></div>
       )}
     </For>
   );

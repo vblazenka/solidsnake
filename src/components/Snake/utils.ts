@@ -19,23 +19,28 @@ export const createInitialSnakeSegment = (
 ];
 
 export const updateSnake = (snake: SnakeSegment[]): SnakeSegment[] => {
-  const SPEED = 2;
-  for (let segment of snake) {
-    switch (segment.dir) {
+  const SPEED = 7;
+
+  function updateSegmentPosition(segment: SnakeSegment): SnakeSegment {
+    let s = { ...segment };
+    switch (s.dir) {
       case SnakeDirection.RIGHT:
-        segment.x += SPEED;
+        s.x += SPEED;
         break;
       case SnakeDirection.DOWN:
         break;
       case SnakeDirection.LEFT:
         break;
+      case SnakeDirection.UP:
+        break;
       default:
-        // UP
         break;
     }
+
+    return s;
   }
 
-  return snake;
+  return snake.map(updateSegmentPosition);
 };
 
 const updateSnakeDirection = (gameState: GameState, key: string): GameState => {
