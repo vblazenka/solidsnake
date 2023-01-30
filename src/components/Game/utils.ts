@@ -17,8 +17,21 @@ export const createInitialGameState = (state: {
   snake: state.snake,
 });
 
-export const isCollisionWithWall = ({ x, y }) => {
+export const isSnakeCollisionWithWall = ({ x, y }) => {
   if (x > 200 || x < -200 || y > 200 || y <= -200) return true;
+
+  return false;
+};
+
+export const isSnakeCollisionWithApple = (snake, apple): boolean => {
+  if (
+    snake.x < apple.x + 3 &&
+    snake.x + 15 > apple.x &&
+    snake.y < apple.y + 6.5 &&
+    snake.y + 15 > apple.y
+  ) {
+    return true;
+  }
 
   return false;
 };
@@ -34,8 +47,16 @@ export const updateGameState = (gameState: GameState): GameState => {
       snake: updateSnake(gameState.snake),
     };
 
-    if (isCollisionWithWall(updatedState.snake[0])) {
+    if (isSnakeCollisionWithWall(updatedState.snake[0])) {
       updatedState.state = PlayState.GAME_OVER;
+    }
+
+    if (isSnakeCollisionWithApple(updatedState.snake[0], updatedState.apple)) {
+      updatedState.score += 1;
+      updatedState.apple = {
+        x: getRandomNumberBetween(-180, 180),
+        y: getRandomNumberBetween(-180, 180),
+      };
     }
 
     return updatedState;
