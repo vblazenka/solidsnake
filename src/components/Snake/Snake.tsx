@@ -1,5 +1,5 @@
 import { Component, createEffect, For, JSXElement, splitProps } from "solid-js";
-import { Head, Part } from "./styles.css.ts";
+import { Head, Part } from "./styles.css";
 import { Snake as SnakeType, SnakeSegment } from "./types";
 
 const getPosition = (segment: SnakeSegment) => ({
