@@ -1,5 +1,5 @@
 import { SnakeSegment } from "../Snake/types";
-import { updateSnake } from "../Snake/utils";
+import { createSnakeSegment, updateSnake } from "../Snake/utils";
 import { GameState, PlayState } from "./types";
 
 const getRandomNumberBetween = (min: number, max: number) =>
@@ -26,9 +26,9 @@ export const isSnakeCollisionWithWall = ({ x, y }) => {
 export const isSnakeCollisionWithApple = (snake, apple): boolean => {
   if (
     snake.x < apple.x + 3 &&
-    snake.x + 15 > apple.x &&
+    snake.x + 14 > apple.x &&
     snake.y < apple.y + 6.5 &&
-    snake.y + 15 > apple.y
+    snake.y + 14 > apple.y
   ) {
     return true;
   }
@@ -57,6 +57,14 @@ export const updateGameState = (gameState: GameState): GameState => {
         x: getRandomNumberBetween(-180, 180),
         y: getRandomNumberBetween(-180, 180),
       };
+      updatedState.snake = [
+        ...updatedState.snake,
+        createSnakeSegment({
+          y: gameState.snake[gameState.snake.length - 1].y,
+          x: gameState.snake[gameState.snake.length - 1].x,
+          dir: gameState.snake[gameState.snake.length - 1].dir,
+        }),
+      ];
     }
 
     return updatedState;

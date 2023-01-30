@@ -29,12 +29,16 @@ export const Game: Component = () => {
   });
 
   useDetectWhitelistedGameKeyEvents((pressedKey) => {
-    if (pressedKey === "Space") {
+    const gameState = getGameState().state;
+
+    if (pressedKey === "Space" && gameState === PlayState.NO_STARTED) {
       setGameState((state) => ({
         ...state,
         state: PlayState.PLAYING,
       }));
-    } else {
+    }
+
+    if (pressedKey !== "Space" && gameState === PlayState.PLAYING) {
       setGameState(updateSnakeDirection(pressedKey));
     }
   });

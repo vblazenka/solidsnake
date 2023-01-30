@@ -21,23 +21,69 @@ export const createInitialSnakeSegment = (
 export const updateSnake = (snake: SnakeSegment[]): SnakeSegment[] => {
   const SPEED = 14;
 
-  function updateSegmentPosition(segment: SnakeSegment): SnakeSegment {
+  function updateSegmentPosition(
+    segment: SnakeSegment,
+    index: number
+  ): SnakeSegment {
     let { dir, x, y } = { ...segment };
 
+    const isHeadSegment = index === 0;
+    const oldDirRef = dir;
+
+    dir = isHeadSegment ? dir : snake[index - 1].dir;
+
+    const isDirChanged = !isHeadSegment && oldDirRef !== dir;
+
     if (dir === SnakeDirection.RIGHT) {
-      x += SPEED;
+      if (isDirChanged) {
+        if (oldDirRef === SnakeDirection.UP) {
+          y -= 14;
+        }
+        if (oldDirRef === SnakeDirection.DOWN) {
+          y += 14;
+        }
+      } else {
+        x += SPEED;
+      }
     }
 
     if (dir === SnakeDirection.LEFT) {
-      x -= SPEED;
+      if (isDirChanged) {
+        if (oldDirRef === SnakeDirection.UP) {
+          y -= 14;
+        }
+        if (oldDirRef === SnakeDirection.DOWN) {
+          y += 14;
+        }
+      } else {
+        x -= SPEED;
+      }
     }
 
     if (dir === SnakeDirection.UP) {
-      y -= SPEED;
+      if (isDirChanged) {
+        if (oldDirRef === SnakeDirection.RIGHT) {
+          x += 14;
+        }
+        if (oldDirRef === SnakeDirection.LEFT) {
+          x -= 14;
+        }
+      } else {
+        y -= SPEED;
+      }
     }
 
     if (dir === SnakeDirection.DOWN) {
-      y += SPEED;
+      if (isDirChanged) {
+        if (oldDirRef === SnakeDirection.RIGHT) {
+          x += 14;
+        }
+        if (oldDirRef === SnakeDirection.LEFT) {
+          x -= 14;
+        }
+      } else {
+        y += SPEED;
+      }
     }
 
     return { x, y, dir };
@@ -59,7 +105,15 @@ export const updateSnakeDirection =
     // It's enough to only update head position
     // the rest of the body will follow
     const [head, ...body] = gameState.snake;
-    head.dir = keyToDirection[key];
+    const newDir = keyToDirection[key];
+
+    const shouldPreventReverseDirection =
+      (newDir === SnakeDirection.RIGHT && head.dir === SnakeDirection.LEFT) ||
+      (newDir === SnakeDirection.LEFT && head.dir === SnakeDirection.RIGHT) ||
+      (newDir === SnakeDirection.UP && head.dir === SnakeDirection.DOWN) ||
+      (newDir === SnakeDirection.DOWN && head.dir === SnakeDirection.UP);
+
+    head.dir = shouldPreventReverseDirection ? head.dir : newDir;
 
     return {
       ...gameState,
