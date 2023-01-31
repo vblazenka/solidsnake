@@ -11,8 +11,8 @@ export const createInitialGameState = (state: {
 }): GameState => ({
   score: 0,
   apple: {
-    x: getRandomNumberBetween(-180, 180),
-    y: getRandomNumberBetween(-180, 180),
+    x: getRandomNumberBetween(-182, 182),
+    y: getRandomNumberBetween(-182, 182),
   },
   state: PlayState.NO_STARTED,
   snake: state.snake,
@@ -35,9 +35,9 @@ export const isSnakeCollisionWithApple = (
   apple: Apple
 ): boolean => {
   if (
-    snake.x < apple.x + 4.5 &&
+    snake.x < apple.x + 12 &&
     snake.x + 14 > apple.x &&
-    snake.y < apple.y + 7.5 &&
+    snake.y < apple.y + 12 &&
     snake.y + 14 > apple.y
   ) {
     return true;

@@ -2,8 +2,8 @@ import { style } from "@vanilla-extract/css";
 
 export const Container = style({
   position: "absolute",
-  width: 10,
-  height: 10,
+  width: 12,
+  height: 12,
   borderRadius: 2,
 
   background: "#D0312D",
