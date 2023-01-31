@@ -10,7 +10,7 @@ import {
 } from "../Snake/utils";
 import { createInitialGameState, updateGameState } from "./utils";
 import { GameState, PlayState } from "./types";
-import { Text } from "../UI";
+import { HUD, Text } from "../UI";
 import { Apple } from "../Apple/Apple";
 
 export const Game: Component = () => {
@@ -52,6 +52,9 @@ export const Game: Component = () => {
         <Match when={getGameState().state === PlayState.PLAYING}>
           <Snake segments={getGameState().snake} />
           <Apple {...getGameState().apple} />
+          <HUD>
+            <Text white>Score: {getGameState().score}</Text>
+          </HUD>
         </Match>
         <Match when={getGameState().state === PlayState.GAME_OVER}>
           <Text blink>GAME OVER</Text>
