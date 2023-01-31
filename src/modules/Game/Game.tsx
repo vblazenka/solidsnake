@@ -53,7 +53,7 @@ export const Game: Component = () => {
           <Text blink>PRESS SPACE TO PLAY</Text>
           <br /> {/* ¯\_(ツ)_/¯ */}
           <Text>This snake is a vegan.</Text>
-          <Text>Eat as many pomodoros as you can.</Text>
+          <Text>Eat as many tomatoes as you can.</Text>
           <Text>Try not to die and have fun. ☺️</Text>
         </Match>
         <Match when={getGameState().state === PlayState.PLAYING}>
