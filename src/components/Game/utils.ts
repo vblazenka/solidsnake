@@ -1,3 +1,4 @@
+import { Apple } from "../Apple/types";
 import { SnakeSegment } from "../Snake/types";
 import { createSnakeSegment, updateSnake } from "../Snake/utils";
 import { GameState, PlayState } from "./types";
@@ -17,23 +18,40 @@ export const createInitialGameState = (state: {
   snake: state.snake,
 });
 
-export const isSnakeCollisionWithWall = ({ x, y }) => {
+export const isSnakeCollisionWithWall = ({
+  x,
+  y,
+}: {
+  x: number;
+  y: number;
+}) => {
   if (x > 200 || x < -200 || y > 200 || y <= -200) return true;
 
   return false;
 };
 
-export const isSnakeCollisionWithApple = (snake, apple): boolean => {
+export const isSnakeCollisionWithApple = (
+  snake: SnakeSegment,
+  apple: Apple
+): boolean => {
   if (
-    snake.x < apple.x + 3 &&
+    snake.x < apple.x + 4.5 &&
     snake.x + 14 > apple.x &&
-    snake.y < apple.y + 6.5 &&
+    snake.y < apple.y + 7.5 &&
     snake.y + 14 > apple.y
   ) {
     return true;
   }
 
   return false;
+};
+
+export const isSnakeCollisionWithSelf = (snake: SnakeSegment[]) => {
+  const [head, ...segments] = snake;
+
+  return segments.reduce((collided, segment) => {
+    return collided || (head.x === segment.x && head.y === segment.y);
+  }, false);
 };
 
 export const updateGameState = (gameState: GameState): GameState => {
@@ -47,7 +65,10 @@ export const updateGameState = (gameState: GameState): GameState => {
       snake: updateSnake(gameState.snake),
     };
 
-    if (isSnakeCollisionWithWall(updatedState.snake[0])) {
+    if (
+      isSnakeCollisionWithWall(updatedState.snake[0]) ||
+      isSnakeCollisionWithSelf(updatedState.snake)
+    ) {
       updatedState.state = PlayState.GAME_OVER;
     }
 
