@@ -20,74 +20,43 @@ export const createInitialSnakeSegment = (
 
 export const updateSnake = (snake: SnakeSegment[]): SnakeSegment[] => {
   const SPEED = 14;
+  const SNAKE_SEGMENT_SIZE = 14;
 
-  function updateSegmentPosition(
-    segment: SnakeSegment,
-    index: number
-  ): SnakeSegment {
-    let { dir, x, y } = { ...segment };
+  const updateSegmentPosition = (segment: SnakeSegment, index: number) => {
+    let { dir, x, y } = segment;
 
     const isHeadSegment = index === 0;
     const oldDirRef = dir;
-
+    // each segment behind head should take the dir from the segment in front of him
     dir = isHeadSegment ? dir : snake[index - 1].dir;
-
+    // if dir is changed then we need to reposition segment behind the next segment
     const isDirChanged = !isHeadSegment && oldDirRef !== dir;
 
-    if (dir === SnakeDirection.RIGHT) {
-      if (isDirChanged) {
-        if (oldDirRef === SnakeDirection.UP) {
-          y -= 14;
-        }
-        if (oldDirRef === SnakeDirection.DOWN) {
-          y += 14;
-        }
-      } else {
-        x += SPEED;
-      }
+    switch (dir) {
+      case SnakeDirection.RIGHT:
+        x += isDirChanged ? 0 : SPEED;
+        if (oldDirRef === SnakeDirection.UP) y -= SNAKE_SEGMENT_SIZE;
+        if (oldDirRef === SnakeDirection.DOWN) y += SNAKE_SEGMENT_SIZE;
+        break;
+      case SnakeDirection.LEFT:
+        x -= isDirChanged ? 0 : SPEED;
+        if (oldDirRef === SnakeDirection.UP) y -= SNAKE_SEGMENT_SIZE;
+        if (oldDirRef === SnakeDirection.DOWN) y += SNAKE_SEGMENT_SIZE;
+        break;
+      case SnakeDirection.UP:
+        y -= isDirChanged ? 0 : SPEED;
+        if (oldDirRef === SnakeDirection.RIGHT) x += SNAKE_SEGMENT_SIZE;
+        if (oldDirRef === SnakeDirection.LEFT) x -= SNAKE_SEGMENT_SIZE;
+        break;
+      case SnakeDirection.DOWN:
+        y += isDirChanged ? 0 : SPEED;
+        if (oldDirRef === SnakeDirection.RIGHT) x += SNAKE_SEGMENT_SIZE;
+        if (oldDirRef === SnakeDirection.LEFT) x -= SNAKE_SEGMENT_SIZE;
+        break;
     }
 
-    if (dir === SnakeDirection.LEFT) {
-      if (isDirChanged) {
-        if (oldDirRef === SnakeDirection.UP) {
-          y -= 14;
-        }
-        if (oldDirRef === SnakeDirection.DOWN) {
-          y += 14;
-        }
-      } else {
-        x -= SPEED;
-      }
-    }
-
-    if (dir === SnakeDirection.UP) {
-      if (isDirChanged) {
-        if (oldDirRef === SnakeDirection.RIGHT) {
-          x += 14;
-        }
-        if (oldDirRef === SnakeDirection.LEFT) {
-          x -= 14;
-        }
-      } else {
-        y -= SPEED;
-      }
-    }
-
-    if (dir === SnakeDirection.DOWN) {
-      if (isDirChanged) {
-        if (oldDirRef === SnakeDirection.RIGHT) {
-          x += 14;
-        }
-        if (oldDirRef === SnakeDirection.LEFT) {
-          x -= 14;
-        }
-      } else {
-        y += SPEED;
-      }
-    }
-
-    return { x, y, dir };
-  }
+    return createSnakeSegment({ x, y, dir });
+  };
 
   return snake.map(updateSegmentPosition);
 };
