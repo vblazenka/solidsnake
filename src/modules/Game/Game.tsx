@@ -1,17 +1,20 @@
-import { Component, createEffect, createSignal, Match, Switch } from "solid-js";
+import { Component, createSignal, Match, Switch } from "solid-js";
 
 import { Canvas } from "../Canvas";
 import { Snake } from "../Snake";
-import { useDetectWhitelistedGameKeyEvents } from "../../hooks/useDetectWhitelistedGameKeyEvents";
-import { useGameLoop } from "../../hooks/useGameLoop";
+import { HUD, Text } from "../UI";
+import { AppleCmp } from "../Apple";
+
+import { useGameEvents } from "./hooks/useGameEvents";
+import { useGameLoop } from "./hooks/useGameLoop";
+
 import {
   createInitialSnakeSegment,
   updateSnakeDirection,
 } from "../Snake/utils";
 import { createInitialGameState, updateGameState } from "./utils";
+
 import { GameState, PlayState } from "./types";
-import { HUD, Text } from "../UI";
-import { Apple } from "../Apple/Apple";
 
 export const Game: Component = () => {
   const $canvas = document.querySelector("#canvas");
@@ -28,7 +31,7 @@ export const Game: Component = () => {
     setGameState(updateGameState);
   });
 
-  useDetectWhitelistedGameKeyEvents((pressedKey) => {
+  useGameEvents((pressedKey) => {
     const gameState = getGameState().state;
 
     if (pressedKey === "Space" && gameState === PlayState.NO_STARTED) {
@@ -48,14 +51,14 @@ export const Game: Component = () => {
       <Switch>
         <Match when={getGameState().state === PlayState.NO_STARTED}>
           <Text blink>PRESS SPACE TO PLAY</Text>
-          <br />
+          <br /> {/* ¯\_(ツ)_/¯ */}
           <Text>This snake is a vegan.</Text>
           <Text>Eat as many pomodoros as you can.</Text>
           <Text>Try not to die and have fun. ☺️</Text>
         </Match>
         <Match when={getGameState().state === PlayState.PLAYING}>
           <Snake segments={getGameState().snake} />
-          <Apple {...getGameState().apple} />
+          <AppleCmp {...getGameState().apple} />
           <HUD>
             <Text white>Score: {getGameState().score}</Text>
           </HUD>

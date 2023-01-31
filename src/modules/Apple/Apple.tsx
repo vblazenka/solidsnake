@@ -1,8 +1,8 @@
 import { Component } from "solid-js";
 import { Container } from "./styles.css";
-import { Apple as AppleType } from "./types";
+import { Apple } from "./types";
 
-export const Apple: Component<AppleType> = (props) => {
+export const AppleCmp: Component<Apple> = (props) => {
   return (
     <div
       class={Container}

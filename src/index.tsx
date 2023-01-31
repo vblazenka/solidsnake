@@ -2,6 +2,6 @@
 import { render } from "solid-js/web";
 
 import "./index.css";
-import { Game } from "./components/Game";
+import { Game } from "./modules/Game";
 
 render(() => <Game />, document.getElementById("root") as HTMLElement);

@@ -14,3 +14,5 @@ export type GameState = {
   apple: Apple;
   snake: SnakeSegment[];
 };
+
+export type GameControlKey = "KeyW" | "KeyA" | "KeyS" | "KeyD" | "Space";

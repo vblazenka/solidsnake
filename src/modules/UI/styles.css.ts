@@ -6,6 +6,7 @@ const blink = keyframes({
 
 export const Text = style({
   fontSize: "1.25rem",
+  margin: 0,
 });
 
 export const WithBlink = style({

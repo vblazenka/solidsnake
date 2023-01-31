@@ -1,11 +1,13 @@
 import { onCleanup, onMount } from "solid-js";
 
-export const useGameLoop = (updateFn, delay: number = 300) => {
-  let timer;
+type Callback = () => void;
+
+export const useGameLoop = (callback: Callback, delay: number = 300) => {
+  let timer: ReturnType<typeof setInterval>;
 
   onMount(() => {
     timer = setInterval(() => {
-      updateFn();
+      callback();
     }, delay);
   });
 
