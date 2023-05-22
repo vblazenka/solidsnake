@@ -18,44 +18,37 @@ export const createInitialSnakeSegment = (
   }),
 ];
 
-export const updateSnake = (snake: SnakeSegment[]): SnakeSegment[] => {
-  const SPEED = 14;
-  const SNAKE_SEGMENT_SIZE = 14;
 
-  const updateSegmentPosition = (segment: SnakeSegment, index: number) => {
+const SPEED = 14;
+const SNAKE_SEGMENT_SIZE = 14;
+
+export const updateSnake = (snake: SnakeSegment[]): SnakeSegment[] => {
+  const getNewPosition = (segment: SnakeSegment, isDirChanged: boolean, oldDirRef: SnakeDirection) => {
     let { dir, x, y } = segment;
 
+    // The adjustments in the x and y directions based on the direction of the snake
+    const directionAdjustments: Record<SnakeDirection, { x: number, y: number }> = {
+      [SnakeDirection.RIGHT]: { x: isDirChanged ? 0 : SPEED, y: oldDirRef === SnakeDirection.UP ? -SNAKE_SEGMENT_SIZE : (oldDirRef === SnakeDirection.DOWN ? SNAKE_SEGMENT_SIZE : 0) },
+      [SnakeDirection.LEFT]: { x: isDirChanged ? 0 : -SPEED, y: oldDirRef === SnakeDirection.UP ? -SNAKE_SEGMENT_SIZE : (oldDirRef === SnakeDirection.DOWN ? SNAKE_SEGMENT_SIZE : 0) },
+      [SnakeDirection.UP]: { y: isDirChanged ? 0 : -SPEED, x: oldDirRef === SnakeDirection.RIGHT ? SNAKE_SEGMENT_SIZE : (oldDirRef === SnakeDirection.LEFT ? -SNAKE_SEGMENT_SIZE : 0) },
+      [SnakeDirection.DOWN]: { y: isDirChanged ? 0 : SPEED, x: oldDirRef === SnakeDirection.RIGHT ? SNAKE_SEGMENT_SIZE : (oldDirRef === SnakeDirection.LEFT ? -SNAKE_SEGMENT_SIZE : 0) },
+    };
+
+    const adjustment = directionAdjustments[dir];
+    return { ...segment, x: x + adjustment.x, y: y + adjustment.y };
+  };
+
+  const updateSegmentPosition = (segment: SnakeSegment, index: number) => {
     const isHeadSegment = index === 0;
-    const oldDirRef = dir;
+    const oldDirRef = segment.dir;
+
     // each segment behind head should take the dir from the segment in front of him
-    dir = isHeadSegment ? dir : snake[index - 1].dir;
+    const dir = isHeadSegment ? segment.dir : snake[index - 1].dir;
+   
     // if dir is changed then we need to reposition segment behind the next segment
     const isDirChanged = !isHeadSegment && oldDirRef !== dir;
 
-    switch (dir) {
-      case SnakeDirection.RIGHT:
-        x += isDirChanged ? 0 : SPEED;
-        if (oldDirRef === SnakeDirection.UP) y -= SNAKE_SEGMENT_SIZE;
-        if (oldDirRef === SnakeDirection.DOWN) y += SNAKE_SEGMENT_SIZE;
-        break;
-      case SnakeDirection.LEFT:
-        x -= isDirChanged ? 0 : SPEED;
-        if (oldDirRef === SnakeDirection.UP) y -= SNAKE_SEGMENT_SIZE;
-        if (oldDirRef === SnakeDirection.DOWN) y += SNAKE_SEGMENT_SIZE;
-        break;
-      case SnakeDirection.UP:
-        y -= isDirChanged ? 0 : SPEED;
-        if (oldDirRef === SnakeDirection.RIGHT) x += SNAKE_SEGMENT_SIZE;
-        if (oldDirRef === SnakeDirection.LEFT) x -= SNAKE_SEGMENT_SIZE;
-        break;
-      case SnakeDirection.DOWN:
-        y += isDirChanged ? 0 : SPEED;
-        if (oldDirRef === SnakeDirection.RIGHT) x += SNAKE_SEGMENT_SIZE;
-        if (oldDirRef === SnakeDirection.LEFT) x -= SNAKE_SEGMENT_SIZE;
-        break;
-    }
-
-    return createSnakeSegment({ x, y, dir });
+    return createSnakeSegment(getNewPosition({ ...segment, dir }, isDirChanged, oldDirRef));
   };
 
   return snake.map(updateSegmentPosition);
